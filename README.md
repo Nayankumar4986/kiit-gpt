@@ -98,3 +98,96 @@ if __name__ == '__main__':
 - The API route processes POST requests to find answers to questions in the MongoDB collection or adds new questions if not found.
 
 
+
+
+
+
+
+Certainly! Let’s break down the JavaScript code step by step:
+
+### `postData` Function
+
+```javascript
+async function postData(url = "", data = {}) {
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+}
+```
+
+- **Function Purpose**: `postData` is an asynchronous function designed to send a POST request to a specified URL with a given data payload and then return the JSON response.
+
+- **Parameters**:
+  - `url`: The endpoint to which the POST request will be sent.
+  - `data`: The data to be sent in the request body, which is expected to be an object.
+
+- **Inside the Function**:
+  - `await fetch(url, {...})`: Sends a POST request to the specified URL with the following options:
+    - `method: "POST"`: Specifies the HTTP method as POST.
+    - `headers: {"Content-Type": "application/json"}`: Sets the content type of the request to JSON.
+    - `body: JSON.stringify(data)`: Converts the data object into a JSON string for the request body.
+  - `return response.json()`: Waits for the response from the server and parses it as JSON.
+
+### `reloadPage` Function
+
+```javascript
+function reloadPage() {
+    location.reload();
+}
+```
+
+- **Function Purpose**: `reloadPage` is a function that reloads the current page.
+
+- **Inside the Function**:
+  - `location.reload()`: This method reloads the current document, effectively refreshing the page.
+
+### `sendButton` Event Listener
+
+```javascript
+sendButton.addEventListener("click", async () => {
+  // questionInput used as question in video check before using
+  const questionInput = document.getElementById("questionInput").value;
+  if (questionInput !== null) {
+    questionInput.value = "";
+  }
+  document.querySelector(".right2").style.display = "block";
+  document.querySelector(".right1").style.display = "none";
+
+  const question1 = document.getElementById("question1");
+  const question2 = document.getElementById("question2");
+  question1.innerHTML = questionInput;
+  question2.innerHTML = questionInput;
+
+  let result = await postData("/api", {"question": questionInput});
+  solution.innerHTML = result.result;
+});
+```
+
+- **Event Listener Purpose**: This code sets up an event listener for a button (presumably `sendButton`) that will trigger when the button is clicked. The click event will execute an asynchronous function.
+
+- **Inside the Event Listener**:
+  - `const questionInput = document.getElementById("questionInput").value;`: Retrieves the value from the input field with the ID `questionInput`.
+  - `if (questionInput !== null) { questionInput.value = ""; }`: If the input value is not null, it clears the input field.
+  - `document.querySelector(".right2").style.display = "block";`: Shows an element with the class `right2`.
+  - `document.querySelector(".right1").style.display = "none";`: Hides an element with the class `right1`.
+  - `const question1 = document.getElementById("question1");`: Gets the element with the ID `question1`.
+  - `const question2 = document.getElementById("question2");`: Gets the element with the ID `question2`.
+  - `question1.innerHTML = questionInput;`: Sets the inner HTML of the `question1` element to the value of `questionInput`.
+  - `question2.innerHTML = questionInput;`: Sets the inner HTML of the `question2` element to the value of `questionInput`.
+  - `let result = await postData("/api", {"question": questionInput});`: Sends the question to the `/api` endpoint using the `postData` function and waits for the result.
+  - `solution.innerHTML = result.result;`: Sets the inner HTML of the `solution` element to the result obtained from the API response.
+
+### Summary
+
+- The `postData` function sends a POST request with JSON data and returns the server’s response in JSON format.
+- The `reloadPage` function reloads the current page.
+- The event listener on `sendButton` handles the click event by sending a question to the server, updating the UI to reflect the question, and displaying the response from the server.
+
+This code snippet is likely part of a frontend application where users can input questions, send them to a backend service, and display the answers or responses in the UI.
+
+
